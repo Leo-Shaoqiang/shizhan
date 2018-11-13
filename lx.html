@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script> -->
+    <script src="vue.js"></script>
+  
+</head>
+<style>
+    .active{
+        background: burlywood;
+    }
+</style>
+<body>
+
+
+                                                                2018-11-13  兄弟通信
+        <div id="app">
+                <huahua></huahua>
+                <shuandan></shuandan>
+            </div>
+        <script>
+                var Event = new Vue();
+                Vue.component('huahua',{
+                    template:
+                    `
+                        <div>我说 :<input @keyup= "on_change()"  v-model="i_said"/></div>
+                    `,
+                    data: function () {
+                        return {
+                            i_said : '',
+                        }
+                      },
+                      methods: {
+                        on_change : function () {  
+                           Event.$emit('huahua-said-sth',this.i_said);
+                        },
+                    },
+        
+                }),
+                Vue.component('shuandan',{
+                    template :
+                    `
+                        <div>花花说: {{huahua_said}}</div>  
+                    `,
+                    data : function () {
+                        return {
+                            huahua_said : '',
+                        }
+                      },
+                      mounted:function() {
+                          var me = this;
+                          Event.$on('huahua-said-sth',function (data) {
+                              me.huahua_said = data;
+                            })
+                      },
+                })
+        
+            new Vue({                       
+                el: '#app',
+            })
+            </script>
+        
+
+
+                                                    2018-11-11 兄弟同步
+
+        <div id="app">
+                <huahua></huahua>
+                <shuandan></shuandan>
+            </div>
+            <script>
+                var Event = new Vue();
+          Vue.component('huahua',{
+              template : 
+              `
+                <div>
+                    我说: <input @keyup = "on_change()" v-model= "i_said"/>
+                    </div>
+              `,
+            
+             data: function() {
+                 return {
+                   i_said : '',
+                 }
+             },
+             methods: {
+                 on_change : function () {
+                     Event.$emit('huahua-said-sth',this.i_said)
+                   }
+             }
+          }),
+          Vue.component('shuandan',{
+              template :`<div>花花说: {{huahua_said}}</div>`,
+              data () {
+                  return {
+                      huahua_said : '',
+                  }
+              },
+              mounted :function() {
+                  var me = this;
+                  Event.$on('huahua-said-sth', function(data){
+                      me.huahua_said = data;
+        
+                  });
+              }, 
+          })
+          </script>
+            new Vue({                       
+                el: '#app',
+            })
+                                  
+
+                                                    <!-- 2018-11-9   点击按钮 显示余额 -->
+
+
+    <!-- <div id="app">
+         <balance></balance>
+     </div>
+     <script>
+      Vue.component('balance',{
+          template:
+          `
+              <div>
+                  <show @show-balance="show_balance = true"></show>   
+              <div v-if="show_balance">您的余额为 ￥ 98</div>   
+                    
+              </div>
+          `,
+          data : function(){
+               return {
+                   show_balance : false,
+               }
+              }
+          })
+      Vue.component('show',{
+              template : '<button @click="onclick()">显示余额</button>',
+              methods : {
+                 onclick(){
+                     this.$emit('show-balance',{a:1,b:2});
+          }
+              }
+ 
+      })  
+     new Vue({
+         el: "#app",
+     })
+ 
+
+                                                        // 2018-11-8  点赞
+                                   
+
+  <div id="app">
+        <like></like>
+    </div>
+    <template id="like-component-tpl">
+            <button  :class = "{liked: liked}"@click="toggle_like()">{{like_count}}</button>
+     </template> 
+<script>
+   Vue.component('like',{
+     template : '#like-component-tpl',
+       data : function(){
+           return {
+               like_count :10,
+               liked : false,
+           }
+       },
+       methods :{
+           toggle_like: function(){
+               if(!this.liked){
+                   this.like_count++;
+                   
+               }else{
+                   this.like_count--;
+                  
+               }
+               this.liked = !this.liked;
+           }
+       }
+   })
+   new Vue({
+       el : '#app',
+   }) 
+</script>
+
+                                                    // 2018-11-8  弹框
+<script>
+
+    var alert_component = {
+         tempalte: '<button @click="on_click">弹弹弹</button>',
+         methods:{
+                 on_click :function(){
+                     alert('YO');
+                 }
+              }
+         };
+        new Vue({
+             el:"#seg1",
+         components:{
+               alert :alert_component
+            }
+         });
+         new Vue({
+             el:"#seg2",
+         }); 
+        </script>
+
+
+                                                    // 2018-11-8 链接动态改变
+        <div id="app">
+            <user username ="廖绍强"></user>
+         </div>
+    <script>
+        Vue.component('user',{
+            template :' <a :href="\'/user/\'+username">{{username}}</a>',
+            props:['username'],
+            methods: {}
+        })
+        new Vue({
+            el: '#app',
+        })
+    </script>
+
+
+                                 //  2018-11-7  统计表 管理系统   鼠标移动事件
+<div id="app">
+    
+    <thead>
+        <th>学科</th>
+        <th>分数</th>
+    </thead>
+    <tbody>
+        <tr>
+        <td>数学</td>
+        <td><input type="text" v-model="math"></td>
+        </tr>
+        <tr>英语</tr>
+        <td><input type="text" v-model="english"></td>
+        <tr>语文</tr>
+        <td><input type="text" v-model="chinese"></td>
+        <tr>总分</tr>
+        <td>{{sum}}</td>
+        <tr>平均分</tr>
+        <td>{{average}}</td>
+
+    </tbody>
+    <div id="seg1">
+            <alert></alert>
+             </div>
+
+
+
+<button  v-on="{mouseenter:onEnter,mouseleave: onLeave}" @click="onClick">点我</button>
+<form @keyup.enter="onEnter" @Submit.prevent = "onSubmit" >
+<input type="text">
+<button type="submit">提交</button>
+</form>
+    <div v-if= "role == 'admin'">
+        管理员你好
+    </div>
+    <div v-else-if="role == 'hr'">
+      待查看简历列表
+
+    </div>
+    <div v-else>
+        您没有权限访问此页面
+    </div> -->
+
+    <a  :class="{active: isActive}" :href="url">点我</a>
+    <input type="text" v-model.trim="name">
+   <p>你的名字是：{{name}}</p>
+   <input type="text" v-model="age">
+   <p>你的年龄是：{{age}}</p>
+   <input type="text" v-model="sex">
+   <p v-if="sex">你的性别是：{{sex}}</p>
+
+   <select v-model="from">
+       <option value="1">成都</option>
+       <option value="2">新都</option>
+       <option value="3">郫都区</option>
+   </select>
+     <label>
+        男 
+        <input type="checkbox" v-model ="sex" value="male">
+    </label>
+    <label>
+            女
+            <input type="checkbox" v-model ="sex" value="female">
+        </label>
+   </div>
+<script>
+    // var app = new Vue({
+    //         el: '#app',
+    //         data: {
+    //             name: '廖绍强',
+    //             age: 18,
+    //             sex: [],
+    //             url: 'http://baidu.com',
+    //             klass: 'btn',
+    //             isActive: true,
+    //             from: 2,
+    //             role: 'hr',
+    //             math: 90,
+    //             english: 80,
+    //             chinese: 70,
+
+    //         },
+    //         methods: {
+    //             onClick: function () {
+    //                 console.log('点击了!');
+    //             },
+    //             onEnter: function () {
+    //                 console.log('mouse enter');
+    //             },
+    //             onLeave: function () {
+    //                 console.log('mouse leave');
+    //             },
+    //             onSubmit: function () {
+
+    //                 console.log('onSubmit');
+    //             },
+    //             onKeyup: function () {
+    //                 console.log('onKeyup');
+    //             },
+    //         },
+    //         computed: {
+    //             sum: function () {
+    //                 return parseFloat(this.math) + parseFloat(this.english) + parseFloat(this.chinese);
+    //             },
+    //             average: function () {
+    //                 return (this.sum / 3);
+    //             }
+    //         }
+    //     });
+</script>
+</body>
+</html> 
+    sss
