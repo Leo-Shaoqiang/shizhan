@@ -15,7 +15,183 @@
     }
 </style>
 <body>
-
+                                            2018-11-14 21：35  toggle事件 及鼠标移动事件
+        <div  id="app">  
+                <popup></popup>
+                <sys></sys>
+            </div>
+        <script>
+            var  base = {               // 类似模块化
+                methods: {
+                    toggle:function () { 
+                        this.visible = ! this.visible;
+                     },
+                     show:function(){
+                        this.visible = true;
+                    },
+                    hide:function(){
+                        this.visible = false;
+                    }
+                },
+                data : function () {
+                    return{
+                        visible : false,
+                    }
+                  }
+            }
+                //   toggle 事件 实现 
+            Vue.component('popup',{
+                template:
+                `
+                    <div> 
+                        <button @click = "toggle()">popup</button>
+                        <div v-if="visible">
+                                <h4>title</h4>
+                                话说周末七国分争 并入于秦
+                                            
+                                高祖斩蛇起义至光武中兴殆始于桓灵
+                                            
+                                太平道人黄巾起义 桃园三结义
+                                            
+                                刘关张斩贼寇立首功乃同心协力
+                                            
+                                何进无谋中贵乱
+                                            
+                                诛阉宦 外檄英雄引虎狼居朝堂
+        
+                            </div>
+                        </div>
+                `,
+                mixins:[base],     // 类似模块化
+               
+            }),
+                // 鼠标划入划出事件
+            Vue.component('sys',{
+                template:
+                `
+                <div>
+                        <span @mouseenter = "show()" @mouseleave="hide()"> sys</span>
+                        <div v-if="visible">
+                            lsqlsqlsqlsq
+                            </div>
+                    </div>
+                `,
+                mixins:[base],
+            })
+            new Vue({
+                el: '#app',
+            })
+            </script>
+                                     2018-11-14  17:09     便利贴效果 +位置移动
+                                     <style>
+                                        .card{
+                                           width: 200px;
+                                           background: #ccc;
+                                            padding: 10px;
+                                            margin: 5px;
+                                        }
+                                    </style>
+                                    <body> 
+                                        <div  id="app">  
+                                             <div v-pin.bottom.right="card1.pinned" class="card">
+                                                <button @click="card1.pinned = ! card1.pinned">钉住/取消</button>
+                                                话说周末七国分争 并入于秦
+                                    
+                                    高祖斩蛇起义至光武中兴殆始于桓灵
+                                    
+                                    太平道人黄巾起义 桃园三结义
+                                    
+                                    刘关张斩贼寇立首功乃同心协力
+                                    
+                                    何进无谋中贵乱
+                                    
+                                    诛阉宦 外檄英雄引虎狼居朝堂
+                                    
+                                    
+                                            </div>
+                                            <div v-pin="card2.pinned" class="card">
+                                                    话说周末七国分争 并入于秦
+                                    
+                                                    高祖斩蛇起义至光武中兴殆始于桓灵
+                                                    
+                                                    太平道人黄巾起义 桃园三结义
+                                                    
+                                                    刘关张斩贼寇立首功乃同心协力
+                                                    
+                                                    何进无谋中贵乱
+                                                    
+                                                    诛阉宦 外檄英雄引虎狼居朝堂
+                                            </div>
+                                           .....
+                                    <script>
+                                            Vue.directive('pin',function (el,binding) { 
+                                                 var pinned = binding.value;
+                                                 var position = binding.modifiers;
+                                                var warning  = binding.arg;
+                                               if(pinned){
+                                                   el.style.position = 'fixed';
+                                                    for(var key in position){
+                                                      if(position[key]){
+                                                        el.style[key] = '10px';
+                                                      }
+                                                    }
+                                                    if(warning ==='true'){
+                                                      el.style.background = 'yellow';
+                                                    }
+                                                 }else{
+                                                    el.style.position = 'static'; 
+                                                 }
+                                             })
+                                        new Vue({
+                                            el: '#app',
+                                            data:{
+                                                card1:{
+                                                    pinned: false,
+                                                },
+                                                card2:{
+                                                    pinned: false,
+                                                }
+                                            },
+                                        })
+                                        </script>
+                                    </body>
+                                               2018-11-14 过滤器
+        <div id="app">
+                <div>
+        
+        <input v-model="price"/>
+        {{price| currency}}
+                    
+                </div>
+                <hr>
+                <div>
+        
+                        <input v-model="length"/>mm
+                        {{length| meter}}
+                </div>
+                
+              
+            </div>
+            <script>
+                Vue.filter('meter',function(val,unit){
+                    val = val || 0;
+                    unit = unit || 'm';
+                    return (val/1000).toFixed(2) + unit ;
+                })
+        
+                    Vue.filter('currency',function(val,unit){
+                        val = val || 0;
+                        unit =unit || '元';
+                        return val+unit;
+                    });
+            new Vue({
+                el: '#app',
+                data:{
+                    price:10,
+                    length:10
+                }
+            })
+            </script>
 
                                                                 2018-11-13  兄弟通信
         <div id="app">
