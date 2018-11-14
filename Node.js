@@ -1,5 +1,48 @@
- 
+                                    2018-11-13   //GET  &&  POST 功能实现
 
+
+var  http = require('http');
+var  fs = require('fs');
+var querystring = require('querystring');
+
+var postHTML = "";
+
+fs.readFile('home.html','utf-8',function (err,data) { 
+    if(err){
+      console.log(err.message);
+      
+    }else{
+      console.log('打开成功！');
+      postHTML = data;
+
+      
+    }
+ });
+
+ http.createServer(function(req,res){
+	 var body = '';
+	 req.on('data',function (chunk) {
+		 body+= chunk;
+	   });
+	   req.on('end',function(){
+		   body = querystring.parse(body);
+		   res.writeHead(200,{
+			'Content-Type':'text/html;charset= utf-8',
+		});
+			if(body.name){
+				c= body.name;
+                // res.write(c+"="+eval(c));
+                res.write(c+"=<script>document.write(eval('"+c+"'))</script>")
+			}else{
+				console.log(postHTML);
+				res.write(postHTML);
+				
+			}
+			res.end();
+	   });
+ }).listen('3000','127.0.0.1');
+ console.log('server at http://127.0.0.1:3000');
+ 
                                       2018-11-12   // 实现路由功能  @lsq  lsq❤ zxc
 var http = require('http');
 var url  = require('url');
